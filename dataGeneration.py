@@ -1,3 +1,4 @@
+from datetime import datetime
 from faker import Faker
 import random
 import pandas
@@ -17,7 +18,7 @@ def creaAziende(nazioni, n_aziende):
         aziende.append({
             'id': i,
             'nome': fake.company(),
-            'data_fondazione': fake.date(),
+            'data_fondazione': fake.date_between_dates(date_start=datetime(1960,1,1), date_end=datetime(1999,12,12)),
             'sede': nazioni[random.randint(0, len(nazioni)-1)]["id"],
             'quotazioni': {}
         })
@@ -60,8 +61,7 @@ def creaPersone(nazioni, n_persone):
         persone.append({
             'id':i,
             'nome':fake.name(),
-            'data_nascita':fake.date(),
-            'nazione_di_residenza':fake.country(),
+            'data_nascita':fake.date_between_dates(date_start=datetime(1932,1,1), date_end=datetime(2004,12,12)),
             'nazionalita': nazioni[random.randint(0, len(nazioni)-1)]["id"]
         })
     
@@ -87,7 +87,7 @@ def creaTransazioni (aziende, banche, n_trans):
             'emittente': emittente,
             'beneficiario': beneficiario,
             'banca': banche[random.randint(0, len(banche)-1)]["id"],
-            'data': fake.date()
+            'data': fake.date_between_dates(date_start=datetime(2000,1,1), date_end=datetime(2022,6,6))
         })
 
     return transazioni
@@ -128,7 +128,7 @@ def assegnaQuote (gruppoA, gruppoB):
 
 #creazione CSV
 def creaCSV(dati, attributi, titolo):
-    path = "/home/meeco/Desktop/BD2Project/files/CSVs/" + titolo + ".csv"
+    path = "/home/meeco/Documenti/BD2Project/files/" + titolo + ".csv"
     dataFrame = pandas.DataFrame(dati, columns=attributi)
     dataFrame.to_csv(path_or_buf=path, index=False)
 
@@ -136,48 +136,71 @@ def creaCSV(dati, attributi, titolo):
 
 def main():
 # --- NAZIONI ---
-    nazioni = creaNazioni(50)
+
+    nazioni = creaNazioni(104)
     nazioni_att = ['id','nome']
     
     creaCSV(nazioni, nazioni_att, 'nazioni')
     
     
 # --- PERSONE ---
-    persone = creaPersone(nazioni, 10)
-    persone_att = ['id','nome','data_nascita', 'nazionalita'] 
+
+    datasetsP = [300, 3000, 15000, 30000]
+    persone_att = ['id','nome','data_nascita', 'nazionalita']
+
+    for p in datasetsP:
+
+        n_persone = p #numero di persone per creare i diversi dataset
+        persone = creaPersone(nazioni, n_persone)
     
-    creaCSV(persone, persone_att, 'persone')
+        creaCSV(persone, persone_att, 'persone' + str(n_persone))
     
-    
+
 # --- AZIENDE ---
-    aziende = creaAziende(nazioni, 10)
+
+    datasetsA = [700, 7000, 35000, 70000]
     aziende_att = ['id','nome','data_fondazione','quotazioni', 'sede']
     
-    gruppoA = aziende[:2] #30% TODO: rendere effettivamente questi valori in percentuali
-    gruppoB = aziende[2:7] #40%
-    gruppoC = aziende[7:] #30%
-    
-    assegnaQuote(gruppoA, gruppoB)
-    assegnaQuote(gruppoB, gruppoC)
-    assegnaQuote(gruppoC, persone)
-    
-    creaCSV(gruppoA+gruppoB, aziende_att, 'aziende') #aziende possedute da altre aziende
-    creaCSV(gruppoC, aziende_att, 'aziende2') #aziende possedute da persone
+    for a in datasetsA:
+        
+        n_aziende = a #numero di aziende per creare i diversi dataset
+        aziende = creaAziende(nazioni, n_aziende)
+
+        trentaPercento = (len(aziende)*30//100)-1
+        settantaPercento = (len(aziende)*70//100)
+        
+        gruppoA = aziende[:trentaPercento] #30% 
+        gruppoB = aziende[trentaPercento:settantaPercento] #40%
+        gruppoC = aziende[settantaPercento:] #30%
+        
+        assegnaQuote(gruppoA, gruppoB)
+        assegnaQuote(gruppoB, gruppoC)
+        assegnaQuote(gruppoC, persone)
+        
+        creaCSV(gruppoA+gruppoB, aziende_att, 'aziende' + str(n_aziende)) #aziende possedute da altre aziende
+        creaCSV(gruppoC, aziende_att, 'aziende-' + str(n_aziende)) #aziende possedute da persone
     
     
 # --- BANCHE ---
-    banche = creaBanche(nazioni, 10)
+
+    banche = creaBanche(nazioni, 120)
     banche_att = ['id','nome','sede']
     
     creaCSV(banche, banche_att, 'banche')
     
     
 # --- TRANSAZIONI ---
-    transazioni = creaTransazioni(aziende, banche, 20)
+
+    datasetsT = [500, 5000, 25000, 50000]
     transazioni_att = ['id', 'codice_transazione', 'importo', 'emittente', 'beneficiario', 'banca', 'data']
-    
-    creaCSV(transazioni, transazioni_att, 'transazioni')
-    
+
+    for t in datasetsT:
+
+        n_transazioni = t #numero di transazioni per creare i diversi dataset
+        transazioni = creaTransazioni(aziende, banche, n_transazioni)
+        
+        creaCSV(transazioni, transazioni_att, 'transazioni' + str(n_transazioni))
+        
     
 # -------------------------- ESECUZIONE MAIN --------------------------
 if __name__ == "__main__":
