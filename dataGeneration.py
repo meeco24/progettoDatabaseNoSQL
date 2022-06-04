@@ -141,7 +141,15 @@ def main():
     nazioni_att = ['id','nome']
     
     creaCSV(nazioni, nazioni_att, 'nazioni')
+
+
+# --- BANCHE ---
+
+    banche = creaBanche(nazioni, 120)
+    banche_att = ['id','nome','sede']
     
+    creaCSV(banche, banche_att, 'banche')
+
     
 # --- PERSONE ---
 
@@ -154,16 +162,20 @@ def main():
         persone = creaPersone(nazioni, n_persone)
     
         creaCSV(persone, persone_att, 'persone' + str(n_persone))
-    
 
-# --- AZIENDE ---
+
+# --- AZIENDE E TRANSAZIONI ---
 
     datasetsA = [700, 7000, 35000, 70000]
     aziende_att = ['id','nome','data_fondazione','quotazioni', 'sede']
+
+    datasetsT = [500, 5000, 25000, 50000]
+    transazioni_att = ['id', 'codice_transazione', 'importo', 'emittente', 'beneficiario', 'banca', 'data']
+
     
-    for a in datasetsA:
+    for x in range(3):
         
-        n_aziende = a #numero di aziende per creare i diversi dataset
+        n_aziende = datasetsA[x] #numero di aziende per creare i diversi dataset
         aziende = creaAziende(nazioni, n_aziende)
 
         trentaPercento = (len(aziende)*30//100)-1
@@ -179,24 +191,10 @@ def main():
         
         creaCSV(gruppoA+gruppoB, aziende_att, 'aziende' + str(n_aziende)) #aziende possedute da altre aziende
         creaCSV(gruppoC, aziende_att, 'aziende-' + str(n_aziende)) #aziende possedute da persone
-    
-    
-# --- BANCHE ---
 
-    banche = creaBanche(nazioni, 120)
-    banche_att = ['id','nome','sede']
-    
-    creaCSV(banche, banche_att, 'banche')
-    
-    
-# --- TRANSAZIONI ---
+#       TRANSAZIONI
 
-    datasetsT = [500, 5000, 25000, 50000]
-    transazioni_att = ['id', 'codice_transazione', 'importo', 'emittente', 'beneficiario', 'banca', 'data']
-
-    for t in datasetsT:
-
-        n_transazioni = t #numero di transazioni per creare i diversi dataset
+        n_transazioni = datasetsT[x] #numero di transazioni per creare i diversi dataset
         transazioni = creaTransazioni(aziende, banche, n_transazioni)
         
         creaCSV(transazioni, transazioni_att, 'transazioni' + str(n_transazioni))
