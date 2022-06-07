@@ -135,6 +135,7 @@ def creaCSV(dati, attributi, titolo):
 # -------------------------- MAIN --------------------------
 
 def main():
+
 # --- NAZIONI ---
 
     nazioni = creaNazioni(104)
@@ -151,20 +152,10 @@ def main():
     creaCSV(banche, banche_att, 'banche')
 
     
-# --- PERSONE ---
+# --- PERSONE, AZIENDE E TRANSAZIONI ---
 
     datasetsP = [300, 3000, 15000, 30000]
     persone_att = ['id','nome','data_nascita', 'nazionalita']
-
-    for p in datasetsP:
-
-        n_persone = p #numero di persone per creare i diversi dataset
-        persone = creaPersone(nazioni, n_persone)
-    
-        creaCSV(persone, persone_att, 'persone' + str(n_persone))
-
-
-# --- AZIENDE E TRANSAZIONI ---
 
     datasetsA = [700, 7000, 35000, 70000]
     aziende_att = ['id','nome','data_fondazione','quotazioni', 'sede']
@@ -172,9 +163,17 @@ def main():
     datasetsT = [500, 5000, 25000, 50000]
     transazioni_att = ['id', 'codice_transazione', 'importo', 'emittente', 'beneficiario', 'banca', 'data']
 
-    
     for x in range(3):
+
+        #PERSONE
+
+        n_persone = datasetsP[x] #numero di persone per creare i diversi dataset
+        persone = creaPersone(nazioni, n_persone)
+    
+        creaCSV(persone, persone_att, 'persone' + str(n_persone))
         
+        #AZIENDE
+
         n_aziende = datasetsA[x] #numero di aziende per creare i diversi dataset
         aziende = creaAziende(nazioni, n_aziende)
 

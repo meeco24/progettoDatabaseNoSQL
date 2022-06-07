@@ -18,25 +18,27 @@ def main():
 
 #query assegnazione quote aziende
     quotaAzienda = '''
-            call apoc.load.csv('file:///aziende.csv')
+            call apoc.load.csv('file:///aziende700.csv')
             yield map as row
             UNWIND apoc.convert.fromJsonList(row.quotazioni) as r
-                match (n:AZIENDA {id:toInteger(row.id)}),(m:AZIENDA {id:toInteger(r.azionista)})
+                match (n:AZIENDA),(m:AZIENDA)
+                WHERE toInteger(n.id) = toInteger(row.id) AND toInteger(m.id) = toInteger(r.azionista)
                 create (n)<-[:POSSIEDE {quota:r.quota}]-(m)
             '''
 
 #query assegnazione quote persone
     quotaAziendaPersona = '''
-            call apoc.load.csv('file:///aziende2.csv')
+            call apoc.load.csv('file:///aziende-700.csv')
             yield map as row
             UNWIND apoc.convert.fromJsonList(row.quotazioni) as r
-                match (n:AZIENDA {id:toInteger(row.id)}),(m:PERSONA {id:toInteger(r.azionista)})
+                match (n:AZIENDA),(m:PERSONA)
+                WHERE toInteger(n.id) = toInteger(row.id) AND toInteger(m.id) = toInteger(r.azionista)
                 create (n)<-[:POSSIEDE {quota:r.quota}]-(m)
             '''
 
 #query per creare le transazioni in uscita azienda->banca
     transazioniInUscita = """
-            call apoc.load.csv('file:///transazioni.csv')
+            call apoc.load.csv('file:///transazioni500.csv')
             yield map as row
             match (a:AZIENDA), (b:BANCA)
             where a.id = toInteger(row.emittente) and b.id = toInteger(row.banca)
@@ -45,7 +47,7 @@ def main():
     
 #query per creare le transazioni in entrata banca->azienda
     transazioniInEntrata = """
-            call apoc.load.csv('file:///transazioni.csv')
+            call apoc.load.csv('file:///transazioni500.csv')
             yield map as row
             match (a:AZIENDA), (b:BANCA)
             where a.id = toInteger(row.beneficiario) and b.id = toInteger(row.banca)
@@ -55,7 +57,7 @@ def main():
 #AREA ESECUZIONE QUERIES
 
     uri = "neo4j://localhost:7687" #uri per connettersi al db
-    driver = GraphDatabase.driver(uri, auth=("neo4j", "dioporco123")) #credenziali di accesso al db
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "progetto123")) #credenziali di accesso al db
 
     session = driver.session()
 
