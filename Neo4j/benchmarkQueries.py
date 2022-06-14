@@ -10,6 +10,9 @@ def executeAndRecord(query, session, titolo):
     f.write("\n\n\n")
     f.close()
 
+    session.run("CALL db.clearQueryCaches()")
+
+
 def main():
 
     uri = "neo4j://localhost:7687" #uri per connettersi al db
@@ -23,7 +26,7 @@ def main():
                 WHERE toInteger(a.sede) = 2 
                 RETURN a
     """
-    titolo1 = "Query 1. Ricerca aziende con sede in Brasile"
+    titolo1 = "Query 1. Ricerca aziende con sede in una data nazione"
     #executeAndRecord(query1, session, titolo1)
 
     #query2
