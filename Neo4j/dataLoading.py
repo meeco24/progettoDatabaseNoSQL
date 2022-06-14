@@ -6,21 +6,21 @@ driver = GraphDatabase.driver(uri, auth=("neo4j", "progetto123")) #credenziali d
 
 #query per caricare il csv con i dati sulle PERSONE sul database
 loadPersone = """
-call apoc.load.csv('file:///persone300.csv')
+call apoc.load.csv('file:///persone10000.csv')
 yield map as row
 merge (p:PERSONA {nome:row.nome, id:toInteger(row.id), data_nascita:row.data_nascita, nazionalita:row.nazionalita})
         """
 
 #query per caricare il csv con i dati sulle AZIENDE sul database
 loadAziende = """
-call apoc.load.csv('file:///aziende700.csv')
+call apoc.load.csv('file:///aziende25000.csv')
 yield map as row
 merge (a:AZIENDA {nome:row.nome, id:toInteger(row.id), data_fondazione:row.data_fondazione, sede:row.sede})
         """
 
 #query per caricare il csv con i dati sulle AZIENDE posseduto da persone sul database
 loadAziendePersona = """
-call apoc.load.csv('file:///aziende-700.csv')
+call apoc.load.csv('file:///aziende-25000.csv')
 yield map as row
 merge (a:AZIENDA {nome:row.nome, id:toInteger(row.id), data_fondazione:row.data_fondazione, sede:row.sede})
         """
@@ -45,6 +45,6 @@ session = driver.session()
 session.run(loadPersone)
 session.run(loadAziende)
 session.run(loadAziendePersona)
-session.run(loadBanche)
-session.run(loadNazioni)
+#session.run(loadBanche)
+#session.run(loadNazioni)
 

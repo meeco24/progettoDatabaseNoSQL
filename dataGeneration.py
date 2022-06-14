@@ -154,16 +154,16 @@ def main():
     
 # --- PERSONE, AZIENDE E TRANSAZIONI ---
 
-    datasetsP = [300, 3000, 15000, 30000]
+    datasetsP = [10000, 7500, 5000, 2500]
     persone_att = ['id','nome','data_nascita', 'nazionalita']
 
-    datasetsA = [700, 7000, 35000, 70000]
+    datasetsA = [25000, 18750, 12500, 6250]
     aziende_att = ['id','nome','data_fondazione','quotazioni', 'sede']
 
-    datasetsT = [500, 5000, 25000, 50000]
+    datasetsT = [15000, 11250, 7500, 3750]
     transazioni_att = ['id', 'codice_transazione', 'importo', 'emittente', 'beneficiario', 'banca', 'data']
 
-    for x in range(3):
+    for x in range(4):
 
         #PERSONE
 
@@ -171,6 +171,8 @@ def main():
         persone = creaPersone(nazioni, n_persone)
     
         creaCSV(persone, persone_att, 'persone' + str(n_persone))
+
+        print("persone" + str(x) + "finito")
         
         #AZIENDE
 
@@ -191,12 +193,17 @@ def main():
         creaCSV(gruppoA+gruppoB, aziende_att, 'aziende' + str(n_aziende)) #aziende possedute da altre aziende
         creaCSV(gruppoC, aziende_att, 'aziende-' + str(n_aziende)) #aziende possedute da persone
 
+        print("aziende" + str(x) + "finito")
+
 #       TRANSAZIONI
 
         n_transazioni = datasetsT[x] #numero di transazioni per creare i diversi dataset
         transazioni = creaTransazioni(aziende, banche, n_transazioni)
         
         creaCSV(transazioni, transazioni_att, 'transazioni' + str(n_transazioni))
+
+        print("transazioni" + str(x) + "finito")
+
         
     
 # -------------------------- ESECUZIONE MAIN --------------------------
