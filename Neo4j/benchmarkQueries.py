@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase
 
 def executeAndRecord(query, session, titolo):
-    f = open(f"/home/meeco/Documenti/BD2Project/files/risultati.txt","a")
+    f = open(f"/home/meeco/Documenti/BD2Project/files/risultati25%.txt","a")
     f.write(f"{titolo}:\n")
     for i in range(31):
         result = session.run(query).consume()
@@ -27,7 +27,7 @@ def main():
                 RETURN a
     """
     titolo1 = "Query 1. Ricerca aziende con sede in una data nazione"
-    #executeAndRecord(query1, session, titolo1)
+    executeAndRecord(query1, session, titolo1)
 
     #query2
     query2 = """
@@ -35,19 +35,19 @@ def main():
                 WHERE a.id = 111
                 RETURN n.nome as Azionisti"""
     titolo2 = "Query 2. Ricerca azionisti di una data azienda"
-    #executeAndRecord(query2, session, titolo2)
+    executeAndRecord(query2, session, titolo2)
 
     #query3
     query3 = """
                 MATCH
-                    (p:PERSONA),
-                    (b:BANCA)-[:SEDE]->(n:NAZIONE),
+                    (p:PERSONA)-[:NAZIONALITÀ]->(n:NAZIONE),
+                    (b:BANCA)-[:SEDE]->(n),
                     (a:AZIENDA)-[:SEDE_LEGALE]->(n)
-                WHERE toInteger(p.nazionalita) = 0 AND toInteger(n.id) = 0
+                WHERE toInteger(n.id) = 0
                 RETURN p, b, a, n.nome
     """
     titolo3 = "Query 3. Ricerca persone, banche e aziende con nazionalità comune"
-    #executeAndRecord(query3, session, titolo3)
+    executeAndRecord(query3, session, titolo3)
 
     #query4
     query4 = """
@@ -56,7 +56,7 @@ def main():
             RETURN COUNT(r) AS Numero_transazioni_in_entrata
     """
     titolo4 = "Query 4. Ricerca numero transazioni in entrata di una data azienda"
-    #executeAndRecord(query4, session, titolo4)
+    executeAndRecord(query4, session, titolo4)
 
     #query5
     query5 = """
@@ -66,7 +66,7 @@ def main():
                 RETURN x.nome AS maggiori_azionisti
     """
     titolo5 = "Query 5. Ricerca maggiori beneficiari di una data transazione"
-    #executeAndRecord(query5, session, titolo5)
+    executeAndRecord(query5, session, titolo5)
 
 if __name__ == "__main__":
     main()
