@@ -25,7 +25,7 @@ def main():
 
 #query assegnazione quote aziende
     quotaAzienda = '''
-            call apoc.load.csv('file:///aziende6250.csv')
+            call apoc.load.csv('file:///aziende25000.csv')
             yield map as row
             UNWIND apoc.convert.fromJsonList(row.quotazioni) as r
                 match (n:AZIENDA),(m:AZIENDA)
@@ -35,7 +35,7 @@ def main():
 
 #query assegnazione quote persone
     quotaAziendaPersona = '''
-            call apoc.load.csv('file:///aziende-6250.csv')
+            call apoc.load.csv('file:///aziende-25000.csv')
             yield map as row
             UNWIND apoc.convert.fromJsonList(row.quotazioni) as r
                 match (n:AZIENDA),(m:PERSONA)
@@ -45,7 +45,7 @@ def main():
 
 #query per creare le transazioni in uscita azienda->banca
     transazioniInUscita = """
-            call apoc.load.csv('file:///transazioni3750.csv')
+            call apoc.load.csv('file:///transazioni15000.csv')
             yield map as row
             match (a:AZIENDA), (b:BANCA)
             where a.id = toInteger(row.emittente) and b.id = toInteger(row.banca)
@@ -54,7 +54,7 @@ def main():
     
 #query per creare le transazioni in entrata banca->azienda
     transazioniInEntrata = """
-            call apoc.load.csv('file:///transazioni3750.csv')
+            call apoc.load.csv('file:///transazioni15000.csv')
             yield map as row
             match (a:AZIENDA), (b:BANCA)
             where a.id = toInteger(row.beneficiario) and b.id = toInteger(row.banca)
@@ -70,7 +70,7 @@ def main():
 
 #    session.run(sedeBanche) #relazione banche->nazioni
 #    session.run(sedeAziende) #relzione aziende->nazioni
-    session.run(nazionalita) #relazione persone->nazioni
+#    session.run(nazionalita) #relazione persone->nazioni
 
 #    session.run(quotaAzienda) #relazione aziende->aziende
 #    session.run(quotaAziendaPersona) #relazione aziende->persone

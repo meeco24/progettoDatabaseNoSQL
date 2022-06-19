@@ -128,7 +128,7 @@ def assegnaQuote (gruppoA, gruppoB):
 
 #creazione CSV
 def creaCSV(dati, attributi, titolo):
-    path = "/home/meeco/Documenti/BD2Project/files/" + titolo + ".csv"
+    path = "/home/meeco/Documenti/BD2Project/progettoDatabaseNoSQL/files/" + titolo + ".csv"
     dataFrame = pandas.DataFrame(dati, columns=attributi)
     dataFrame.to_csv(path_or_buf=path, index=False)
 

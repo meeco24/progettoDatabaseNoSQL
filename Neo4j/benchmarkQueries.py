@@ -2,7 +2,7 @@ from neo4j import GraphDatabase
 
 def executeAndRecord(query, session, titolo):
     #sostituire titolo file per avere i risultati dei diversi dataset su file distinti
-    f = open(f"/home/meeco/Documenti/BD2Project/files/risultati25%.txt","a")
+    f = open(f"/home/meeco/Documenti/BD2Project/progettoDatabaseNoSQL/files/risultati100%.txt","a")
     f.write(f"{titolo}:\n")
     for i in range(31):
         result = session.run(query).consume()

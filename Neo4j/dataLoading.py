@@ -42,9 +42,9 @@ merge (n:NAZIONE {id:toInteger(row.id), nome:row.nome})
 #ESECUZIONE QUERIES
 session = driver.session()
 
-session.run(loadPersone)
-session.run(loadAziende)
-session.run(loadAziendePersona)
+#session.run(loadPersone)
+#session.run(loadAziende)
+#session.run(loadAziendePersona)
 #session.run(loadBanche)
 #session.run(loadNazioni)
 
